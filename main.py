@@ -47,7 +47,7 @@ class Game:
         self.player = Player(self, 10, 10)
         self.all_sprites.add(self.player)
         for x in range(10, 20):
-            Wall(self, x, 5)
+             Wall(self, x, 5)
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -81,7 +81,7 @@ class Game:
         pass
     def update(self):
         self.all_sprites.update()
-    
+
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
             pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
@@ -125,3 +125,4 @@ while True:
     g.new()
     g.run()
     # g.show_go_screen()
+

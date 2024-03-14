@@ -11,10 +11,9 @@ class Player(pg.sprite.Sprite):
         # init super class
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        # self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image = pg.Surface((TILESIZE, TILESIZE))
         # added player image to sprite from the game class...
         self.image = game.player_img
-        # self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
@@ -69,8 +68,8 @@ class Player(pg.sprite.Sprite):
 
     # UPDATE THE UPDATE
     def update(self):
-        # self.rect.x = self.x
-        # self.rect.y = self.y
+        self.rect.x = self.x
+        self.rect.y = self.y
         self.get_keys()
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
@@ -80,8 +79,8 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('y')
         self.collide_with_bigger()
         self.collide_with_invisible()
-        # self.rect.x = self.x * TILESIZE
-        # self.rect.y = self.y * TILESIZE
+        self.rect.x = self.x * TILESIZE
+        self.rect.y = self.y * TILESIZE
 
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -97,13 +96,13 @@ class Wall(pg.sprite.Sprite):
         self.rect.y = y * TILESIZE
         self.speed = 0
     def update(self):
-        # self.rect.x += 1
+        self.rect.x += 1
         self.rect.x += TILESIZE * self.speed
-        # self.rect.y += TILESIZE * self.speed
+        self.rect.y += TILESIZE * self.speed
         if self.rect.x > WIDTH or self.rect.x < 0:
             self.speed *= -1
-        # if self.rect.y > HEIGHT or self.rect.y < 0:
-        #     self.speed *= -1
+        if self.rect.y > HEIGHT or self.rect.y < 0:
+             self.speed *= -1
             
 class Bigger(pg.sprite.Sprite):
     def __init__(self, game, x, y):
