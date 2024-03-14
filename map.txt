@@ -3,7 +3,6 @@ x......x
 x.....x.    i
 xxxxxx..
 x.....x.*
-x......x
-x......x
-xxxxxxx.p 
-
+x......x...p
+x......xxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxxxxxxxxxx 

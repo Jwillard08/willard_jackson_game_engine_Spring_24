@@ -8,10 +8,13 @@ from settings import *
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
+        # init super class
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(GREEN)
+        # self.image = pg.Surface((TILESIZE, TILESIZE))
+        # added player image to sprite from the game class...
+        self.image = game.player_img
+        # self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
@@ -31,7 +34,7 @@ class Player(pg.sprite.Sprite):
             
     def collide_with_walls(self, dir):
         if dir == 'x':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False )
+            hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
                 if self.vx > 0:
                     self.x = hits[0].rect.left - self.rect.width
@@ -40,7 +43,7 @@ class Player(pg.sprite.Sprite):
                 self.vx = 0
                 self.rect.x = self.x
         if dir == 'y':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False )
+            hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
                 if self.vy > 0:
                     self.y = hits[0].rect.top - self.rect.height
@@ -127,6 +130,13 @@ class Invisible(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+        
+
+
+
+
+        
 
         
 

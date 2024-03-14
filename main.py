@@ -27,6 +27,8 @@ class Game:
     def load_data(self):
         game_folder = path.dirname(__file__)
         self.map_data = []
+        img_folder = path.join(game_folder, 'image')
+        self.player_img = pg.image.load(path.join(img_folder, 'Goomba.png')).convert_alpha
         '''
         The with statement is a context manager in Python. 
         It is used to ensure that a resource is properly closed or released 
@@ -42,10 +44,10 @@ class Game:
         self.walls = pg.sprite.Group()
         self.bigger = pg.sprite.Group()
         self.invisible = pg.sprite.Group()
-        # self.player = Player(self, 10, 10)
-        # self.all_sprites.add(self.player)
-        # for x in range(10, 20):
-        #     Wall(self, x, 5)
+        self.player = Player(self, 10, 10)
+        self.all_sprites.add(self.player)
+        for x in range(10, 20):
+            Wall(self, x, 5)
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -123,4 +125,3 @@ while True:
     g.new()
     g.run()
     # g.show_go_screen()
-
