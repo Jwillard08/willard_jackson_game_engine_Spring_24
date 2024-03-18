@@ -40,9 +40,10 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.coins = pg.sprite.Group()
-        # self.player1 = Player(self, 1, 1)
-        # for x in range(10, 20):
-        #     Wall(self, x, 5)
+        self.smaller = pg.sprite.Group()
+        self.player1 = Player(self, 1, 1)
+        for x in range(10, 20):
+             Wall(self, x, 5)
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -52,6 +53,10 @@ class Game:
                     Wall(self, col, row)
                 if tile == 'P':
                     self.player = Player(self, col, row)
+                if tile == 's':
+                    Smaller(self, col, row)
+                if tile == 'i':
+                    Invisible(self, col, row)
                 if tile == 'C':
                     Coin(self, col, row)
 
