@@ -1,4 +1,4 @@
-# This file was created by: Chris Cozort
+# This file was created by: Jackson Willard
 
 # import libraries and modules
 import pygame as pg
@@ -44,6 +44,7 @@ class Game:
         self.walls = pg.sprite.Group()
         self.coins = pg.sprite.Group()
         self.smaller = pg.sprite.Group()
+        self.fast = pg.sprite.Group()
         self.player1 = Player(self, 1, 1)
         for x in range(10, 20):
              Wall(self, x, 5)
@@ -60,11 +61,12 @@ class Game:
                     Smaller(self, col, row)
                 if tile == 'i':
                     Invisible(self, col, row)
+                if tile == "k":
+                    Fast(self, col, row)
                 if tile == 'C':
                     Coin(self, col, row)
 
     def run(self):
-        # 
         self.playing = True
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000

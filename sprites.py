@@ -1,4 +1,4 @@
-# This file was created by: Chris Cozort
+# This file was created by: Jackson Willard
 # This code was inspired by Zelda and informed by Chris Bradfield
 import pygame as pg
 from settings import *
@@ -15,18 +15,19 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0
+        self.speed = 300
     
     def get_keys(self):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
-            self.vx = -PLAYER_SPEED  
+            self.vx = -self.speed
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
-            self.vx = PLAYER_SPEED  
+            self.vx = self.speed   
         if keys[pg.K_UP] or keys[pg.K_w]:
-            self.vy = -PLAYER_SPEED  
+            self.vy = -self.speed  
         if keys[pg.K_DOWN] or keys[pg.K_s]:
-            self.vy = PLAYER_SPEED
+            self.vy = self.speed
         if self.vx != 0 and self.vy != 0:
             self.vx *= 0.7071
             self.vy *= 0.7071
@@ -67,17 +68,18 @@ class Player(pg.sprite.Sprite):
         if hits:
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1
-        if hits:
             if str(hits[0].__class__.__name__) == "Smaller":
                 self.image = pg.Surface((self.rect.height / 2, self.rect.width / 2))
                 self.image.fill((GREEN))
                 self.rect.height = self.rect.height / 2
                 self.rect.height = self.rect.width / 2
+            if str(hits[0].__class__.__name__) == "Fast":
+                self.speed =+ 600
+    def chasing(self):
                 
-        
+                
 
-
-    def update(self):
+    
         self.get_keys()
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
@@ -87,6 +89,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('x')
         # add collision later
         self.collide_with_group(self.game.smaller, True)
+        self.collide_with_group(self.game.fast, True)
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
           
@@ -127,13 +130,27 @@ class Smaller(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
+class Fast(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.fast
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+        self.speed = 600
+
 class Invisible(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(BGCOLOR)
+        self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
