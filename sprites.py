@@ -1,7 +1,9 @@
-# This file was created by: Jackson Willard
+# This file was created by: Chris Cozort
 # This code was inspired by Zelda and informed by Chris Bradfield
 import pygame as pg
 from settings import *
+import sys
+import os
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -15,15 +17,15 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0
-        self.speed = 300
+        self.speed = 100
     
     def get_keys(self):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
-            self.vx = -self.speed
+            self.vx = -self.speed  
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
-            self.vx = self.speed   
+            self.vx = self.speed
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vy = -self.speed  
         if keys[pg.K_DOWN] or keys[pg.K_s]:
@@ -62,6 +64,8 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
+        
+
     
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
@@ -69,29 +73,31 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1
             if str(hits[0].__class__.__name__) == "Smaller":
-                self.image = pg.Surface((self.rect.height / 2, self.rect.width / 2))
-                self.image.fill((GREEN))
-                self.rect.height = self.rect.height / 2
-                self.rect.height = self.rect.width / 2
+                    self.image = pg.Surface((self.rect.height / 2, self.rect.width / 2))
+                    self.image.fill((GREEN))
+                    self.rect.height = self.rect.height / 2
+                    self.rect.height = self.rect.width / 2
             if str(hits[0].__class__.__name__) == "Fast":
                 self.speed =+ 600
-    def chasing(self):
-                
-                
+            if str(hits[0].__class__.__name__) == "Invisible":
+                sys.exit()
+            
 
-    
+
+    def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
         self.rect.x = self.x
-        self.rect.y = self.y
         # add collision later
         self.collide_with_walls('x')
-        # add collision later
         self.collide_with_group(self.game.smaller, True)
         self.collide_with_group(self.game.fast, True)
+        self.rect.y = self.y
+        # add collision later
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
+        self.collide_with_group(self.game.invisible, False)
           
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
@@ -116,14 +122,27 @@ class Wall(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
-
 class Smaller(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.smaller
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(YELLOW)
+        self.image.fill(LIGHTGREY)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+
+class Invisible(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.walls, game.invisible
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -143,19 +162,6 @@ class Fast(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
         self.speed = 600
-
-class Invisible(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.walls
-        pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(GREEN)
-        self.rect = self.image.get_rect()
-        self.x = x
-        self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
 
 
 

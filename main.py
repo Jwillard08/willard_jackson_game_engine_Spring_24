@@ -1,4 +1,4 @@
-# This file was created by: Jackson Willard
+# This file was created by: Chris Cozort
 
 # import libraries and modules
 import pygame as pg
@@ -24,9 +24,8 @@ class Game:
     def load_data(self):
         game_folder = path.dirname(__file__)
         self.map_data = []
-
-        image_folder = path.join(game_folder, 'image')
-        self.player_img = pg.image.load(path.join(image_folder, 'Goomba.png')).convert_alpha()
+        self.img_folder = path.join(game_folder, 'image')
+        self.player_img = pg.image.load(path.join(self.img_folder, 'Goomba.png')).convert_alpha()
         '''
         The with statement is a context manager in Python. 
         It is used to ensure that a resource is properly closed or released 
@@ -45,9 +44,10 @@ class Game:
         self.coins = pg.sprite.Group()
         self.smaller = pg.sprite.Group()
         self.fast = pg.sprite.Group()
-        self.player1 = Player(self, 1, 1)
-        for x in range(10, 20):
-             Wall(self, x, 5)
+        self.invisible = pg.sprite.Group()
+        # self.player1 = Player(self, 1, 1)
+        # for x in range(10, 20):
+        #     Wall(self, x, 5)
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -57,22 +57,24 @@ class Game:
                     Wall(self, col, row)
                 if tile == 'P':
                     self.player = Player(self, col, row)
-                if tile == 's':
-                    Smaller(self, col, row)
                 if tile == 'i':
                     Invisible(self, col, row)
+                if tile == 's':
+                    Smaller(self, col, row)
                 if tile == "k":
                     Fast(self, col, row)
                 if tile == 'C':
                     Coin(self, col, row)
 
     def run(self):
+        # 
         self.playing = True
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
             self.update()
             self.draw()
+
     def quit(self):
          pg.quit()
          sys.exit()
